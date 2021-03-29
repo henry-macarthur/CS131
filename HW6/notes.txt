@@ -1,0 +1,163 @@
+ODIN
+====
+designed with the intent of an alternative to C
+    - simple 
+    - high performance
+    - modern 
+    - programming 
+
+The language itself has quite different syntax in C, but this syntax makes it more intuitive to program in 
+    - maps - not built into C 
+
+context: 
+    local to each scope and is implicityly passed by pointer 
+    intercept third party code and libraries and modify their functionality 
+
+
+Manual Memory Management 
+    odin programmers must manage their own memory  
+        allocation, deallocation, tracking 
+
+    allocators keep track of memory allocated in the context 
+        we can free all the memory allocated in the context by freeing it: 
+
+            free_all(context.temp_allocator)
+
+
+
+parametric polymorphism 
+    much more capable than C's
+    
+
+
+* pass by value 
+* can return multiple results (int, int)
+
+* explicit overloading gives the programmer more control of which procedure will be used 
+* has c strings 
+
+* for arrays the program defualt checks access at compile and run time fror safety but can  
+    be disabled to improve performance 
+
+* slice -> like pythons implementation 
+    references to arrays 
+
+* dynamic arrays are resizable and allocated using context allocator 
+
+make and delete for allocation and deallocation 
+
+* implicit selector expr 
+
+
+* has pointers just like in C, but there is limited arithmetic to keep programers safe 
+
+* structs are similar to C
+    dont have to dereference pointers to structs 
+
+any - reference any data type. 
+
+using -> applied to imports, struct, procedures, values to import them into the current scope / namespace 
+
+
+Foreign system: 
+    iterface with foreign code 
+
+
+ROUGH OUTLINE:
+=============
+
+1. The Odin Programming language is designed to be an alternatice to C. It hopes to offer programers more 
+    simplicty and higher performance. 
+
+2. When it comes to program syntax and capabilities, Odin attempts to offer users the same functionality as C with 
+    more intuitive and modern syntax and more capabilities. 
+
+    - multiple return arguments 
+        - program design becomes a bit easier as a user is not restricted to return just one type or 
+        variable as in C. A programmer can issue the return statement, return x,y in order to achieve this, and x and y do 
+        not necessarily have to be of the same type. 
+    
+    - defer statement
+        - this allows a programmer to defer code execution to the end of the program. For example, we can write 
+        the code os.close(something) right after we open it, and the code will ensure that this code is ran right 
+        after program execution. This is extremely helpful syntactially as from personal experience, remembering to 
+        add code right at the end of the program to deal with allocated memory or system calls can be the source of 
+        a lot of bugs
+    
+    - using statment 
+        - this functionality allows us to bring in variables from an outside namespace into the current one. For exmple 
+        if we have the following struct: 
+            TEMP :: struct { x, y : int}
+
+        in another method we can invoke the "using" keyword as follows 
+            using TEMP; 
+        which allows us acces TEMP's variables directly as x, y instead of TEMP.x, TEMP.y 
+
+        when using a lot of nested variables or foreign namespaces, this can be quite helpful 
+        as it helps us avoid type errors or trying to reference data that doesnt exist.
+
+    - explicit overloading 
+        - when we overload a function in C, the compiler automatically decides which version it will use for us. 
+        This makes it easy on the programmer, but revokes our ability to choose what we want to call. As a result, this 
+        adds complexity and increased program overhead. By making the programmer explicitly define overloaded functions, 
+        the compiler doesn't have to pay an extra price to try and match the given call with the right function, and it
+        gives the programmer more control over control flow. 
+
+    - memory management 
+        - Just like C, Odin is a manual memory management language. This means that there is no GC or external program 
+        helping the programmer deal with reclaiming or cleaning up unused memory. This is beneficial for a few reasons. 
+        First, it helps the program remain simple and stripped down as specified, meaning there are less external sources 
+        that can be corrupted. Second, it improves program performance. Since the programmer has to do all of the memory management, 
+        the program itself does not have to pay overhead fees to run a garbage collector. Lastly, Odin's take on manual memory 
+        management is much more favorable than that of C's. In C, as the programmer, you have to manually call free on all of the 
+        allocated memory. This can become a pain if u are calling malloc quite frequently to create a lot of different objects 
+        or create nested dynamic objects. In order to combat this, Odin introduced allocators and context variables. A context 
+        variable basically keeps track of the variables and data in the current program scope. Certain data types are allocated 
+        memory through an allocator. Allocators can be user defined, but they are often associated with the current context 
+        and are automatically passed into the creation of these variable types. As a result, we can have differnet objects in the 
+        same context have the same allocator. By using the method free_all on the current context allocator, we can 
+        free all of the memory managed by that allocator. This makes memory management much faster and efficient for 
+        the programmer as he doesn't always have to call free on each object he allocates. In addition, this language supports 
+        all the same memory management functionalities as C through make, free, delete, new, alloc, and realloc. 
+
+    - has a built in map function which C does not 
+
+3. Foreign system
+    This is used when u have to interface with foreign code such as a C library
+    this is how u can import code not written in Odin 
+
+    adds more flexiblity and capability, but leaves more room for attack. Foreign modules can be loaded in 
+    as a method of jeapardizing code integrity and reliability. Not everything is contained locally and this means that it could 
+    be a way for hackers to take control of the system through their own defined libraries 
+
+
+4. hardware I/O 
+    nothing in the spec said anything about being able to interface with hardware. The only implied way at the moment 
+    would be to utilize their Foreign system to load in some C code that handles interfacing with the 
+    desired device. This seems problematic as it leaves more room for exploit, and we are having to use an 
+    external language to do one of the main parts of our task which seems counterintuitive. 
+
+    If we can access hardware through this language directly, the documentation is lacking 
+    or this support is still in development 
+
+
+
+
+we can get subtype polymorphism - like inheritance in c++
+    no need for vtables or unknown struct layout 
+    using allows us to import a foreign namespace basicallym so in a struct we can call using on a foreign struct to access
+    its data. i.e getting inheritance like properties 
+
+
+
+array splicing like python 
+does bounds checking for us to minimize out of bounds errors 
+    #bounds_check v #no_bounds_check 
+no operator overloading - simple less bugs 
+no pointer arithmetic - simple less bugs 
+default init to 0 
+no ++ or -- 
+similar syntax, but removes syntactic sugar and keywords to make it simple to understand and parse 
+    int *a, b 
+    a, b: ^int 
+
