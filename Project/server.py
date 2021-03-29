@@ -6,7 +6,7 @@ import aiohttp
 import re
 import json
 
-#AIzaSyDehYS79r1wXZ3msMg1VNyxFn33eW6DD40
+
 localhost = '127.0.0.1'
 
 client_data = {}
@@ -158,7 +158,7 @@ async def handle_WHATSAT(message, message_list):
     radius_m = int(radius) * 1000
     
     #start working on the http request
-    key = "AIzaSyDehYS79r1wXZ3msMg1VNyxFn33eW6DD40" #hide this later 
+
     request_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + current_msg[2] + "," + current_msg[3] + "&radius=" + str(radius_m) + "&key=" + key
     async with aiohttp.ClientSession(
         connector=aiohttp.TCPConnector(
