@@ -1,0 +1,52 @@
+while the spec hinted at some sort of relationship between make_parser and 
+make_matcher I did not find a solution where make_parser called make_matcher
+although, I did realize that these two functions did nearly the same thing
+but make_parser just had to keep track of the rules it visited and 
+had to store them in a list to build the parse tree. While these 
+functions are very similar, I did not create any helper functions 
+that were shared between the two, but after v parser, If 
+I were to redo make_matcher, I would have made helper functions 
+for the dfs traversal and how I iterated over each rule as that 
+code was heavily shared between both parts of the project. In 
+doing so I could have saved a lot of duplicated and shared code
+between the two functions. 
+
+As metnioned above, one of the big weaknesses of my project 
+is repeated and duplicate code between the two functions. 
+I could have vastly reduced the amount of code written and 
+made my code more robust if I combined shared functionality
+into like 2 or 3 extra helper functions. Another weakness 
+Is that my code does not handle grammars with loops in it.
+So if we have a rule like 
+
+N
+N -> C
+C -> N 
+
+or anything like 
+N 
+N -> N 
+N -> C B 
+C -> B 
+B -> N 
+
+my code has no 
+way of detecting loops and will always get stuck in an infinite 
+loop if trying to build a parse tree. I could have avoided this 
+by having a variable that keeps track of a list of visited 
+rules or non terminals used in order to do some sort of 
+cycle detection, but I felt that the added complexity was not 
+worth it as it added complications that interfered with my other 
+cases, and I thought it better for my code to work a majority of
+the time and to not tune it too specifically for rare edge cases
+
+Another case that my code doesnt perform too well is when we have 
+a rule that is too long for the fragment, for example say we had a 
+fragment: 
+[1 + 3]
+and a rule: 
+[N, N, N, T, N]
+
+it is clear that the given rule is too long for the fragment, but 
+the algorithm i have devised will still look at and fully try the rule 
+if it comes before the matching rule. By not having a early fail 

@@ -1,0 +1,29 @@
+subset: 
+    The key to this function was the List.mem function. I just
+    looped through every element recursiveley in a and used List.mem 
+    to see if it was in b. if we get through all a, return true 
+
+equal_sets: 
+    used basic set logic -> if two sets are subsets of one another 
+    then we know that they must be equal 
+
+set_union: 
+    loop through all elements recursiveley in a, if List.hd a is contained in b, then do not add it,
+    otherwise append it to the start of b
+
+set_symdiff: 
+    find the intersection by looping through b and removing all elements not in b. Use set_union 
+    to find the union of 2 sets. loop through the union and remove all elements in the intersection
+
+computed_fixed_point: 
+    trivially do as the question states, we recursively apply f to input x until x is equivalent(as determined
+    by our input comparator) to input x
+
+filter_reachable: 
+    The key to this solution was using the fixed point function. We start with the entire grammar, and 
+    a starting symbol. We then call find_reachable on this input. This function recursiveley takes the 
+    symbols that we have discovered(starting from the starting symbols), and finds all of the rules that are 
+    associated with it(ie on the left hand side of the expression) and adds it to our reachable list. We keep 
+    calling function on X(which keeps track of the reachable rules so far), and so when f(x) = x which means we 
+    cannot reach any more rules given all our discovered rules, we know that we have discovered all possilbe rules 
+    from the grammar. if F(x) != x, we know we have more rules to discover and keep looking
